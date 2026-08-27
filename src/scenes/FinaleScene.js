@@ -104,17 +104,28 @@ export class FinaleScene {
         <p class="finale-credits-main">${config.finale.endTitle}</p>
         <p class="finale-credits-sub">${config.finale.endSubtitle.replace(/\n/g, '<br>')}</p>
         <button class="btn-primary" id="replay-btn" style="opacity: 1; transform: none; pointer-events: auto;">
-          Experience it again ✨
+          Kamre mein wapas jaao 🏠
         </button>
       `;
       gsap.to(endEl, { opacity: 1, duration: 1.5, delay: 0.5 });
 
       document.getElementById('replay-btn').onclick = () => {
-        audioManager.playSFX('click');
-        gsap.to(document.body, {
+        // Remove the finale 3D rakhi from scene
+        if (this._finalRakhi) {
+          sceneManager.scene.remove(this._finalRakhi);
+          this._finalRakhi = null;
+        }
+        // Fade out and remove the finale screen
+        gsap.to(this._screenEl, {
           opacity: 0,
-          duration: 1,
-          onComplete: () => window.location.reload()
+          duration: 0.6,
+          onComplete: () => {
+            const el = document.getElementById('finale-screen');
+            if (el) el.remove();
+            // Reset camera back to room default
+            cameraController.reset(1.5);
+            this.app.goToState('ROOM');
+          }
         });
       };
     }
