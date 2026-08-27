@@ -264,14 +264,14 @@ export class GiftScene {
       }
     }, 200);
 
-    // Button click → FINALE
+    // Button click → ROOM
     document.getElementById('book-continue-btn').onclick = () => {
       audioManager.playSFX('click');
       gsap.to(el, {
         opacity: 0, duration: 0.5, onComplete: () => {
           el.remove();
           cameraController.reset(1.5);
-          this.app.goToState('FINALE');
+          this.app.goToState('ROOM');
         }
       });
     };

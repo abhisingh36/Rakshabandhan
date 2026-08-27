@@ -206,7 +206,7 @@ export const config = {
       "Hamesha aise hi rehna. ❤️"
     ],
     endTitle: "Made especially for Diksha ✨",
-    endSubtitle: "With lots of love,\nfrom your cousin ❤️"
+    endSubtitle: "With lots of love,\nfrom your chhotu bhaiya 😄❤️"
   },
 
   // ── Audio settings ─────────────────────────────────────────────────────────
