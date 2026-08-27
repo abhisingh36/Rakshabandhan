@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#FDFAF5" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description" content="A little something made just for Diksha. Happy Raksha Bandhan ❤️" />
+    <title>Just For Diksha ✨</title>
+
+    <!-- Elegant Serif for headings -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/src/styles/main.css">
+  </head>
+  <body>
+    <!-- Desktop Redirect -->
+    <div id="desktop-overlay">
+      <div class="desktop-content">
+        <div class="desktop-icon">📱</div>
+        <p class="desktop-title">Made for a phone.</p>
+        <p class="desktop-sub">This little surprise was made to be experienced on a phone. Open it on your mobile for the full magic. ❤️</p>
+      </div>
+    </div>
+
+    <!-- Landscape Overlay -->
+    <div id="landscape-overlay">
+      <div class="landscape-content">
+        <div class="landscape-icon">🌷</div>
+        <p>Turn your phone upright for the full experience</p>
+      </div>
+    </div>
+
+    <!-- 3D Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Layer -->
+    <div id="ui-layer">
+      <!-- Loading Screen -->
+      <div id="loading-screen" class="screen active">
+        <div class="loader-content">
+          <div class="loader-icon">✨</div>
+          <p class="loader-label">Preparing Diksha's little world...</p>
+          <div class="progress-bar">
+            <div class="progress-fill" id="loading-progress"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlays will be injected here by UIManager -->
+      <div id="overlays-container"></div>
+
+      <!-- Audio Controls -->
+      <button id="audio-toggle" class="audio-btn hidden" aria-label="Toggle music">
+        <svg id="icon-unmuted" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        <svg id="icon-muted" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+      </button>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
