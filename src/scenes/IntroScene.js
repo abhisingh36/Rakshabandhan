@@ -97,6 +97,16 @@ export class IntroScene {
         });
 
         btn.addEventListener('click', () => {
+          // Request fullscreen on user interaction
+          const elem = document.documentElement;
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(e => console.log('Fullscreen failed:', e));
+          } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+          } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+          }
+
           audioManager.playBGM();
           audioManager.playSFX('click');
 

@@ -1,0 +1,10 @@
+{
+  "name": "Just For Diksha",
+  "short_name": "Diksha",
+  "description": "A little something made just for Diksha.",
+  "start_url": "/",
+  "display": "fullscreen",
+  "background_color": "#FDFAF5",
+  "theme_color": "#FDFAF5",
+  "orientation": "portrait"
+}
