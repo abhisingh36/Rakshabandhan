@@ -52,21 +52,21 @@ class Application {
 
       // Letter — on desk surface, centre-left
       const letter = createLetter();
-      letter.position.set(-0.6, 2.2, -3.8);
+      letter.position.set(-1.0, 2.2, -3.2);
       letter.rotation.y = 0.1;
 
       // Teddy — on desk, right side
       const teddy = createTeddy();
-      teddy.position.set(1.6, 2.12, -3.6);
+      teddy.position.set(2.5, 2.12, -3.5);
 
       // Rakhi — on desk, left side
       const rakhi = createRakhi();
-      rakhi.position.set(-1.8, 2.32, -4.0);
+      rakhi.position.set(-2.8, 2.32, -3.5);
       rakhi.rotation.y = -0.15;
 
       // Flowers — on the desk, centre area (between letter and teddy)
       const flowers = createFlowers();
-      flowers.position.set(0.6, 2.12, -3.6);
+      flowers.position.set(0.8, 2.12, -3.4);
       flowers.scale.set(0.85, 0.85, 0.85);
 
       // Gift box — on the floor, in front-left, within view

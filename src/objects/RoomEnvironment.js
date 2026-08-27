@@ -170,19 +170,19 @@ export function createRoomEnvironment() {
   room.add(rugBorder);
 
   // ── Desk (warm walnut, rounded) ───────────────────────────────────────────
-  const deskTop = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.12, 2.0), M.wood);
-  deskTop.position.set(0, 2.12, -4.2);
+  const deskTop = new THREE.Mesh(new THREE.BoxGeometry(7.0, 0.12, 3.5), M.wood);
+  deskTop.position.set(0, 2.12, -3.7);
   deskTop.castShadow = true;
   deskTop.receiveShadow = true;
   room.add(deskTop);
 
   // Desk front face edge (darker strip)
-  const deskEdge = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.12, 0.06), M.wood);
-  deskEdge.position.set(0, 2.06, -3.25);
+  const deskEdge = new THREE.Mesh(new THREE.BoxGeometry(7.0, 0.12, 0.06), M.wood);
+  deskEdge.position.set(0, 2.06, -2.0);
   room.add(deskEdge);
 
   // Desk legs (tapered elegant style)
-  [[-2.0, -4.6], [2.0, -4.6], [-2.0, -3.8], [2.0, -3.8]].forEach(([x, z]) => {
+  [[-3.0, -4.6], [3.0, -4.6], [-3.0, -2.6], [3.0, -2.6]].forEach(([x, z]) => {
     const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.04, 2.0, 12), M.wood);
     leg.position.set(x, 1.0, z);
     leg.castShadow = true;
@@ -191,11 +191,11 @@ export function createRoomEnvironment() {
 
   // ── Small Side Table (round top, right of desk) ───────────────────────────
   const sideTabTop = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.06, 32), M.woodLight);
-  sideTabTop.position.set(3.5, 1.5, -2.0);
+  sideTabTop.position.set(4.8, 1.5, -2.0);
   sideTabTop.castShadow = true;
   room.add(sideTabTop);
   const sideTabLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.04, 1.44, 12), M.woodLight);
-  sideTabLeg.position.set(3.5, 0.75, -2.0);
+  sideTabLeg.position.set(4.8, 0.75, -2.0);
   sideTabLeg.castShadow = true;
   room.add(sideTabLeg);
   // Tripod base feet
@@ -204,7 +204,7 @@ export function createRoomEnvironment() {
     const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.4, 8), M.woodLight);
     foot.rotation.z = Math.PI / 5;
     foot.position.set(
-      3.5 + Math.sin(rad) * 0.35,
+      4.8 + Math.sin(rad) * 0.35,
       0.12,
       -2.0 + Math.cos(rad) * 0.35
     );
@@ -331,10 +331,10 @@ export function createRoomEnvironment() {
 
   // ── Small decorative lamp on side table ──────────────────────────────────
   const lampBase = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, 0.06, 16), M.wood);
-  lampBase.position.set(3.5, 1.56, -2.0);
+  lampBase.position.set(4.8, 1.56, -2.0);
   room.add(lampBase);
   const lampPole = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.7, 12), M.wood);
-  lampPole.position.set(3.5, 1.91, -2.0);
+  lampPole.position.set(4.8, 1.91, -2.0);
   room.add(lampPole);
   // Shade
   const shadeGeo = new THREE.ConeGeometry(0.3, 0.35, 20, 1, true);
@@ -343,13 +343,13 @@ export function createRoomEnvironment() {
     transparent: true, opacity: 0.9
   });
   const shade = new THREE.Mesh(shadeGeo, shadeMat);
-  shade.position.set(3.5, 2.42, -2.0);
+  shade.position.set(4.8, 2.42, -2.0);
   shade.rotation.x = Math.PI;
   shade.castShadow = false;
   room.add(shade);
   // Lamp glow
   const lampGlow = new THREE.PointLight(0xFFE8B0, 0.8, 4);
-  lampGlow.position.set(3.5, 2.26, -2.0);
+  lampGlow.position.set(4.8, 2.26, -2.0);
   room.add(lampGlow);
 
   // ── Wall art (simple decorative frame on back wall) ───────────────────────
