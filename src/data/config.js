@@ -29,27 +29,27 @@ export const config = {
   // If an image is missing, a warm placeholder card will show instead.
   memories: [
     {
-      image: "/assets/images/diksha/memory1.jpg",
+      image: "./assets/images/diksha/memory1.jpg",
       caption: "Hum dono ki vibe alag hi hoti hai. 😄✌️",
       date: ""
     },
     {
-      image: "/assets/images/diksha/memory2.jpg",
+      image: "./assets/images/diksha/memory2.jpg",
       caption: "Diksha ready for the event... aur clearly sab se sundar bhi. 💛✨",
       date: ""
     },
     {
-      image: "/assets/images/diksha/memory3.jpg",
+      image: "./assets/images/diksha/memory3.jpg",
       caption: "Cake bhi hai, smile bhi hai — perfect combo. 🎂😊",
       date: ""
     },
     {
-      image: "/assets/images/diksha/memory4.jpg",
+      image: "./assets/images/diksha/memory4.jpg",
       caption: "Ye wali photo toh meri favourite hai. 🧡",
       date: ""
     },
     {
-      image: "/assets/images/diksha/memory5.jpg",
+      image: "./assets/images/diksha/memory5.jpg",
       caption: "Saath mein celebrate karna — best feeling. 🎉❤️",
       date: ""
     }
@@ -212,12 +212,12 @@ export const config = {
   // ── Audio settings ─────────────────────────────────────────────────────────
   // Place your audio files in: public/assets/audio/
   audio: {
-    bgm:     '/assets/audio/bgm.mp3',      // Warm, soft background music
-    click:   '/assets/audio/click.mp3',
-    sparkle: '/assets/audio/sparkle.mp3',
-    success: '/assets/audio/success.mp3',
-    wrong:   '/assets/audio/wrong.mp3',
-    open:    '/assets/audio/open.mp3',
+    bgm:     './assets/audio/bgm.mp3',      // Warm, soft background music
+    click:   './assets/audio/click.mp3',
+    sparkle: './assets/audio/sparkle.mp3',
+    success: './assets/audio/success.mp3',
+    wrong:   './assets/audio/wrong.mp3',
+    open:    './assets/audio/open.mp3',
     bgmVolume: 0.3
   }
 };
