@@ -205,15 +205,12 @@ export class GiftScene {
           box-shadow: 0 16px 48px rgba(120,80,30,0.18), 0 4px 12px rgba(0,0,0,0.08);
           transform: rotate(-1.5deg);
         ">
-          <div class="gift-photo-container">
-            <img class="gift-photo" 
-            src="./assets/images/diksha/gift.jpg" 
-            alt="Gift Surprise" 
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-            <div class="photo-placeholder hidden">
-              <span>🎁</span>
-            </div>
-          </div>
+          <img
+            src="./assets/images/diksha/gift.jpg"
+            alt="Gift Surprise"
+            style="width: 100%; display: block; object-fit: cover; aspect-ratio: 3/4;"
+            onerror="this.style.display='none'"
+          />
         </div>
 
         <!-- Book name -->
