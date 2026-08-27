@@ -127,35 +127,40 @@ class Application {
   }
 
   _addPulseIndicators() {
-    // Add subtle animated rings beneath interactive objects to guide discovery
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: 0xD4A76A,
+    const indicatorMat = new THREE.MeshBasicMaterial({
+      color: 0xFFE066,
       transparent: true,
-      opacity: 0.35,
-      side: THREE.DoubleSide
+      opacity: 0.8
     });
 
     Object.values(this.interactables).forEach(obj => {
-      const ring = new THREE.Mesh(new THREE.RingGeometry(0.22, 0.32, 28), ringMat.clone());
-      ring.rotation.x = -Math.PI / 2;
-      ring.position.set(
-        obj.position.x,
-        obj.position.y - 0.05,
-        obj.position.z
+      obj.updateWorldMatrix(true, true);
+      const box = new THREE.Box3().setFromObject(obj);
+      const topY = box.max.y;
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+
+      const indicator = new THREE.Mesh(new THREE.OctahedronGeometry(0.08, 0), indicatorMat.clone());
+      
+      indicator.position.set(
+        center.x,
+        topY + 0.25,
+        center.z
       );
 
-      // Don't add floor rings to wall-mounted objects
-      if (obj.position.y > 2.5) return;
+      // Frame is mounted on the wall, push indicator slightly forward
+      if (obj === this.interactables.frame) {
+        indicator.position.z += 0.15;
+      }
 
-      sceneManager.scene.add(ring);
+      sceneManager.scene.add(indicator);
 
-      // Animate pulsing
-      let age = 0;
+      const startY = indicator.position.y;
       sceneManager.addUpdatable({
         update: (delta, elapsed) => {
-          const s = 1.0 + Math.sin(elapsed * 2.0) * 0.2;
-          ring.scale.set(s, s, s);
-          ring.material.opacity = 0.2 + Math.sin(elapsed * 2.0) * 0.15;
+          indicator.position.y = startY + Math.sin(elapsed * 3.0) * 0.06;
+          indicator.rotation.y += delta * 2.0;
+          indicator.material.opacity = 0.4 + Math.sin(elapsed * 5.0) * 0.4;
         }
       });
     });

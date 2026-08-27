@@ -1,8 +1,4 @@
 import * as THREE from 'three';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-
 class SceneManager {
   constructor() {
     this.canvasContainer = document.getElementById('canvas-container');
@@ -35,19 +31,6 @@ class SceneManager {
     this.renderer.toneMappingExposure = 1.1;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-    // Post-processing — very subtle bloom so warm emissives glow softly
-    this.composer = new EffectComposer(this.renderer);
-    const renderPass = new RenderPass(this.scene, this.camera);
-    this.composer.addPass(renderPass);
-
-    const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight),
-      0.25,  // very gentle strength
-      0.5,   // radius
-      0.88   // threshold — only emissive highlights glow
-    );
-    this.composer.addPass(bloomPass);
-
     this.canvasContainer.appendChild(this.renderer.domElement);
 
     // Raycaster
@@ -67,7 +50,6 @@ class SceneManager {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.composer.setSize(window.innerWidth, window.innerHeight);
   }
 
   addUpdatable(object) {
@@ -93,7 +75,7 @@ class SceneManager {
       if (object.update) object.update(delta, elapsedTime);
     }
 
-    this.composer.render();
+    this.renderer.render(this.scene, this.camera);
   }
 
   getIntersectedObject(event, interactableObjects) {

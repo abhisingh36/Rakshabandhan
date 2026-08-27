@@ -8,16 +8,7 @@ class UIManager {
     this.screens = {};
     this._activeModal = null;
 
-    // Audio button
-    this.audioBtn = document.getElementById('audio-toggle');
-    this.iconUnmuted = document.getElementById('icon-unmuted');
-    this.iconMuted   = document.getElementById('icon-muted');
-
-    this.audioBtn.addEventListener('click', () => {
-      const muted = audioManager.toggleMute();
-      this.iconUnmuted.classList.toggle('hidden', muted);
-      this.iconMuted.classList.toggle('hidden', !muted);
-    });
+    // Audio button removed per user request
   }
 
   // ── Screens ────────────────────────────────────────────────────────────────

@@ -15,7 +15,7 @@ class AudioManager {
     // For now, we will just set up the infrastructure.
     // User can replace 'assets/audio/bgm.mp3'
     this.bgm = new Howl({
-      src: ['assets/audio/bgm.mp3'], // Placeholder path
+      src: ['assets/audio/bgm.webm'], // Placeholder path
       loop: true,
       volume: 0.3,
       onloaderror: () => {

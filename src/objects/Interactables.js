@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { sceneManager } from '../scene/SceneManager.js';
 
 // ─────────────────────────────────────────────────────────────────
 // Helper: mark a group as interactive with hover text
