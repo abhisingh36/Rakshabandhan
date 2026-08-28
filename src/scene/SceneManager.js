@@ -5,9 +5,9 @@ class SceneManager {
 
     // Scene
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xFDF8F0);
-    // Lighter fog so scene stays visible from z=12
-    this.scene.fog = new THREE.FogExp2(0xFDF8F0, 0.012);
+    this.scene.background = new THREE.Color(0xFDF6EE);
+    // Very subtle atmospheric depth — warm cream haze
+    this.scene.fog = new THREE.FogExp2(0xFDF4E8, 0.008);
 
     // Camera — tuned for mobile portrait (tall, narrow aspect)
     // Use 65° FOV: portrait aspect ~0.46 means horizontal FOV = 2*atan(tan(32.5°)*0.46) ≈ 30°
@@ -26,9 +26,9 @@ class SceneManager {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    // ACES gives beautiful warm rendering vs. Reinhard
+    // ACES filmic — premium cinematic colour grading
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.1;
+    this.renderer.toneMappingExposure = 1.25;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     this.canvasContainer.appendChild(this.renderer.domElement);

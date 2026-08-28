@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { sceneManager } from '../scene/SceneManager.js';
 import { cameraController } from '../scene/CameraController.js';
+import { orbit360 } from '../scene/OrbitControls360.js';
 import { uiManager } from '../ui/UIManager.js';
 import { particleSystem } from '../scene/ParticleSystem.js';
 import { audioManager } from '../audio/AudioManager.js';
@@ -14,39 +15,53 @@ export class RoomScene {
     this.hoveredObject = null;
     this._firstEnter = true;
 
-    this.onPointerMove = this.onPointerMove.bind(this);
-    this.onClick       = this.onClick.bind(this);
-    this.onTouchStart  = this.onTouchStart.bind(this);
-    this.onTouchEnd    = this.onTouchEnd.bind(this);
+    // Drag detection: if pointer travels more than this threshold it's a drag, not a click
+    this._DRAG_THRESHOLD = 10; // pixels
 
-    this._touchStartPos = null;
+    this._pointerDownPos = null;
+    this._isDragging = false;
+
+    this.onPointerMove  = this.onPointerMove.bind(this);
+    this.onPointerDown  = this.onPointerDown.bind(this);
+    this.onPointerUp    = this.onPointerUp.bind(this);
+    this.onTouchStart   = this.onTouchStart.bind(this);
+    this.onTouchEnd     = this.onTouchEnd.bind(this);
   }
 
   enter() {
     this.isActive = true;
 
-    // Camera glides to room default position
+    // Camera glides to room default position first
     cameraController.reset(2.0);
+
+    // Enable 360° orbit after camera settles
+    setTimeout(() => {
+      orbit360.enable();
+    }, 2100);
 
     // Show room hint on first entry
     if (this._firstEnter) {
       this._firstEnter = false;
       setTimeout(() => {
-        uiManager.showRoomHint(config.roomHint);
+        uiManager.showRoomHint(config.roomHint || '✨ Drag to look around • Tap objects to explore');
       }, 2500);
     }
 
     // Event listeners
     window.addEventListener('pointermove', this.onPointerMove);
-    window.addEventListener('click',       this.onClick);
+    window.addEventListener('pointerdown', this.onPointerDown);
+    window.addEventListener('pointerup',   this.onPointerUp);
     window.addEventListener('touchstart',  this.onTouchStart, { passive: true });
     window.addEventListener('touchend',    this.onTouchEnd);
   }
 
   exit() {
     this.isActive = false;
+    orbit360.disable();
+
     window.removeEventListener('pointermove', this.onPointerMove);
-    window.removeEventListener('click',       this.onClick);
+    window.removeEventListener('pointerdown', this.onPointerDown);
+    window.removeEventListener('pointerup',   this.onPointerUp);
     window.removeEventListener('touchstart',  this.onTouchStart);
     window.removeEventListener('touchend',    this.onTouchEnd);
     uiManager.hideTooltip();
@@ -59,13 +74,52 @@ export class RoomScene {
     document.body.style.cursor = 'default';
   }
 
+  // ── Pointer (mouse + pen) ──────────────────────────────────────────────────
+
+  onPointerDown(event) {
+    if (!this.isActive || event.pointerType === 'touch') return;
+    this._pointerDownPos = { x: event.clientX, y: event.clientY };
+    this._isDragging = false;
+  }
+
+  onPointerMove(event) {
+    if (!this.isActive || event.pointerType === 'touch') return;
+
+    // Track whether it became a drag
+    if (this._pointerDownPos) {
+      const dx = Math.abs(event.clientX - this._pointerDownPos.x);
+      const dy = Math.abs(event.clientY - this._pointerDownPos.y);
+      if (dx > this._DRAG_THRESHOLD || dy > this._DRAG_THRESHOLD) {
+        this._isDragging = true;
+      }
+    }
+
+    // Only show hover highlight when not dragging
+    if (!this._isDragging) {
+      this._updateHover(event);
+    }
+  }
+
+  onPointerUp(event) {
+    if (!this.isActive || event.pointerType === 'touch') return;
+
+    if (!this._isDragging) {
+      // It was a genuine click — fire interaction
+      this._fireClick();
+    }
+
+    this._pointerDownPos = null;
+    this._isDragging = false;
+  }
+
+  // ── Touch ──────────────────────────────────────────────────────────────────
+
   onTouchStart(event) {
     if (!this.isActive || !event.touches.length) return;
     this._touchStartPos = {
       x: event.touches[0].clientX,
       y: event.touches[0].clientY
     };
-    // Also update hover from touch position
     this._updateHover(event);
   }
 
@@ -76,23 +130,15 @@ export class RoomScene {
     const dx = Math.abs(event.changedTouches[0].clientX - this._touchStartPos.x);
     const dy = Math.abs(event.changedTouches[0].clientY - this._touchStartPos.y);
 
-    // Only fire click if it was a tap (not a swipe)
-    if (dx < 12 && dy < 12) {
+    // Tap (not swipe) → fire click
+    if (dx < this._DRAG_THRESHOLD && dy < this._DRAG_THRESHOLD) {
       this._updateHover(event);
       this._fireClick();
     }
     this._touchStartPos = null;
   }
 
-  onPointerMove(event) {
-    if (!this.isActive || event.pointerType === 'touch') return;
-    this._updateHover(event);
-  }
-
-  onClick(event) {
-    if (!this.isActive || event.type === 'click' && event.pointerType === 'touch') return;
-    this._fireClick();
-  }
+  // ── Internal ───────────────────────────────────────────────────────────────
 
   _updateHover(event) {
     const interactableList = Object.values(this.interactables);
@@ -100,12 +146,10 @@ export class RoomScene {
 
     if (intersected) {
       if (this.hoveredObject !== intersected) {
-        // Reset previous
         if (this.hoveredObject) {
           this.hoveredObject.scale.copy(this.hoveredObject.userData.originalScale);
         }
         this.hoveredObject = intersected;
-        // Subtle scale up on hover
         const s = this.hoveredObject.userData.originalScale;
         this.hoveredObject.scale.set(s.x * 1.08, s.y * 1.08, s.z * 1.08);
         document.body.style.cursor = 'pointer';

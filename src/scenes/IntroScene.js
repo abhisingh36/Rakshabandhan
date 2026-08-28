@@ -23,9 +23,9 @@ export class IntroScene {
     }
     uiManager.showScreen('intro-screen');
 
-    // Camera: begin far back and above, will zoom in on "Let's go"
-    sceneManager.camera.position.set(0, 8, 18);
-    cameraController.lookAtTarget = { x: 0, y: 2, z: -2 };
+    // Camera: begin high and far back, zooms in during sequence
+    sceneManager.camera.position.set(0, 7, 16);
+    cameraController.lookAtTarget = { x: 0, y: 2.5, z: -2 };
 
     this._spawnPetals();
     this._playSequence();
@@ -134,11 +134,11 @@ export class IntroScene {
   }
 
   _exit() {
-    // Camera glides into the room
+    // Camera glides to fixed look-around eye position inside the room
     cameraController.moveTo(
-      { x: 0, y: 2, z: 10 },
-      { x: 0, y: 1, z: 0 },
-      2.5
+      { x: 0, y: 3.2, z: 3.5 },   // matches orbit360.fixedPos
+      { x: 0, y: 2.5, z: -3 },
+      2.2
     );
 
     gsap.to('#intro-screen', {

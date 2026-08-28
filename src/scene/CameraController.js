@@ -5,19 +5,24 @@ class CameraController {
   constructor() {
     this.camera = sceneManager.camera;
 
-    // ── Default room overview position ───────────────────────────────────
-    // Camera is further back (z=12) and higher (y=3.8) to compensate for
-    // portrait mobile's narrow horizontal FOV. With 65° VFOV this gives
-    // enough horizontal coverage to see all desk objects + gift on floor.
-    this.defaultPos    = { x: 0.5, y: 3.8, z: 12 };
-    this.defaultLookAt = { x: 0,   y: 2.2, z: -2 };
+    // ── Default position = orbit360.fixedPos (inside room, eye level) ─────
+    // Camera glides here during room entry, then orbit360 takes over.
+    this.defaultPos    = { x: 0,   y: 3.2, z: 3.5 };
+    this.defaultLookAt = { x: 0,   y: 2.5, z: -3 };
 
     this.lookAtTarget = { ...this.defaultLookAt };
+
+    // When orbit360 is active it takes over camera control.
+    // Set this flag so CameraController.update() yields.
+    this.orbitActive = false;
 
     sceneManager.addUpdatable(this);
   }
 
   update() {
+    // Yield to OrbitControls360 when it's running
+    if (this.orbitActive) return;
+
     this.camera.lookAt(
       this.lookAtTarget.x,
       this.lookAtTarget.y,
@@ -48,6 +53,7 @@ class CameraController {
   }
 
   reset(duration = 2, onComplete = null) {
+    this.orbitActive = false; // ensure we control camera during reset
     this.moveTo(this.defaultPos, this.defaultLookAt, duration, onComplete);
   }
 }
