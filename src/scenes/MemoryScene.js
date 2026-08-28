@@ -32,15 +32,17 @@ export class MemoryScene {
 
     const screen = document.createElement('div');
     screen.id = id;
-    screen.className = 'screen active';
+    screen.className = 'screen active memory-screen';
     screen.style.cssText = `
       background: linear-gradient(160deg, #FDFAF5 0%, #F5EFE3 100%);
       pointer-events: auto;
-      overflow: hidden;
+      overflow-y: auto;
     `;
 
     screen.innerHTML = `
       <div class="memory-container">
+        <button class="memory-close-icon" id="mem-close-top" aria-label="Close memories">✕</button>
+
         <h2 class="memory-title">${config.memoriesTitle}</h2>
         <p class="memory-subtitle">Swipe or tap to explore →</p>
 
@@ -53,13 +55,13 @@ export class MemoryScene {
         <p class="memory-caption" id="mem-caption"></p>
 
         <div class="memory-nav">
-          <button class="memory-nav-btn" id="mem-prev">←</button>
+          <button class="memory-nav-btn" id="mem-prev" aria-label="Previous photo">←</button>
           <div class="memory-dots" id="mem-dots"></div>
-          <button class="memory-nav-btn" id="mem-next">→</button>
+          <button class="memory-nav-btn" id="mem-next" aria-label="Next photo">→</button>
         </div>
 
-        <div style="margin-top: 24px; opacity:0; transition: opacity 0.5s;" id="mem-back-btn-wrap">
-          <button class="btn-secondary" id="mem-back">Back to the room</button>
+        <div class="memory-back-wrap" id="mem-back-btn-wrap">
+          <button class="btn-primary" id="mem-back">Back to Room 🏠</button>
         </div>
       </div>
     `;
@@ -69,6 +71,12 @@ export class MemoryScene {
     // Build dots
     this._buildDots();
     this._updateCard(false);
+
+    // Top close button
+    const topClose = document.getElementById('mem-close-top');
+    if (topClose) {
+      topClose.onclick = () => this._close();
+    }
 
     // Navigation
     document.getElementById('mem-prev').onclick = () => {
@@ -178,7 +186,28 @@ export class MemoryScene {
       // Nav buttons
       prev.classList.toggle('invisible', this.currentIndex === 0);
       const isLast = this.currentIndex === config.memories.length - 1;
-      next.textContent = isLast ? 'Finish ✓' : '→';
+      if (isLast) {
+        next.innerHTML = `<span>Finish</span> <span class="finish-check">✓</span>`;
+        next.classList.add('is-finish');
+        next.classList.remove('is-back-room');
+        next.style.visibility = 'visible';
+        next.style.opacity = '1';
+        next.onclick = () => this._showEnd();
+      } else {
+        next.textContent = '→';
+        next.classList.remove('is-finish', 'is-back-room');
+        next.style.visibility = 'visible';
+        next.style.opacity = '1';
+        next.onclick = () => {
+          if (this.currentIndex < config.memories.length - 1) {
+            this.currentIndex++;
+            this._updateCard(true, 'left');
+            audioManager.playSFX('click');
+          } else {
+            this._showEnd();
+          }
+        };
+      }
     };
 
     if (animate) {
@@ -200,23 +229,34 @@ export class MemoryScene {
   }
 
   _showEnd() {
+    audioManager.playSFX('click');
     const captionEl = document.getElementById('mem-caption');
     if (captionEl) {
       gsap.to(captionEl, {
         opacity: 0,
         duration: 0.3,
         onComplete: () => {
-          captionEl.innerHTML = `<em>${config.memoriesEnd}</em>`;
+          captionEl.innerHTML = `<em class="memory-end-text">${config.memoriesEnd}</em>`;
           gsap.to(captionEl, { opacity: 1, duration: 0.6 });
         }
       });
     }
 
-    const backWrap = document.getElementById('mem-back-btn-wrap');
-    if (backWrap) backWrap.style.opacity = '1';
-
     const next = document.getElementById('mem-next');
-    if (next) next.style.visibility = 'hidden';
+    if (next) {
+      next.innerHTML = `<span>Back to Room</span> <span class="finish-check">🏠</span>`;
+      next.classList.add('is-finish', 'is-back-room');
+      next.style.visibility = 'visible';
+      next.style.opacity = '1';
+      next.onclick = () => this._close();
+      gsap.fromTo(next, { scale: 0.88 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
+    }
+
+    const backWrap = document.getElementById('mem-back-btn-wrap');
+    if (backWrap) {
+      backWrap.classList.add('visible');
+      gsap.fromTo(backWrap, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.2 });
+    }
   }
 
   _close() {
